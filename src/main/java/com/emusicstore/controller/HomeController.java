@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.jws.WebParam;
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.IOException;
@@ -121,6 +122,33 @@ public class HomeController {
 
         productDao.deleteProduct(id);
         return "redirect:/admin/productInventory";
+    }
+
+    @GetMapping("/admin/productInventory/editProduct/{productId}")
+    public String editProduct(@PathVariable("productId") int id, Model model) {
+        Product product = productDao.getProductById(id);
+
+        model.addAttribute(product);
+        return "editProduct";
+    }
+
+    @PostMapping("/admin/productInventory/editProduct")
+    public String editProduct(@ModelAttribute("product") Product product, HttpServletRequest request, Model model) {
+
+        MultipartFile productImage = product.getProductImage();
+        String rootDirectory = request.getSession().getServletContext().getRealPath("/");
+        path = Paths.get(rootDirectory + "WEB-INF/resources/images/picture" + product.getProductId() + ".png");
+        model.addAttribute(product);
+        if (productImage != null && !productImage.isEmpty()) {
+            try {
+                productImage.transferTo(new File(path.toString()));
+            } catch (IOException e) {
+                e.printStackTrace();
+                throw new RuntimeException("Product image saving failed", e);
+            }
+        }
+        productDao.editProduct(product);
+        return  "redirect:/admin/productInventory";
     }
 
 }
