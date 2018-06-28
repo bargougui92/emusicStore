@@ -14,7 +14,7 @@
                    modelAttribute="product" enctype="multipart/form-data">
 
         <div class="form-group">
-            <label for="name">Name</label>
+            <label for="name">Name</label> <form:errors path="productName" cssStyle="color: red"/>
             <form:input path="productName" id="name" class="form-Control"/>
         </div>
 
@@ -34,7 +34,7 @@
         </div>
 
         <div class="form-group">
-            <label for="price">Price</label>
+            <label for="price">Price</label> <form:errors path="productPrice" cssStyle="color: red" />
             <form:input path="productPrice" id="price" class="form-Control"/>
         </div>
 
@@ -55,7 +55,7 @@
         </div>
 
         <div class="form-group">
-            <label for="unitInStock">Unit In Stock</label>
+            <label for="unitInStock">Unit In Stock</label> <form:errors path="unitInStock" cssStyle="color: red"/>
             <form:input path="unitInStock" id="unitInStock" class="form-Control"/>
         </div>
 

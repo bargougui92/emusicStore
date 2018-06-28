@@ -5,11 +5,13 @@ import com.emusicstore.model.Product;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.jws.WebParam;
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -79,7 +81,12 @@ public class HomeController {
 
     //Posting and processing the form
     @PostMapping("/admin/productInventory/addProduct")
-    public String addProductPost(@ModelAttribute("product") Product product, HttpServletRequest request) {
+    public String addProductPost(@Valid @ModelAttribute("product") Product product,
+                                 BindingResult result,
+                                 HttpServletRequest request) {
+        if(result.hasErrors()){
+            return "addProduct";
+        }
         productDao.addProduct(product);
         //save product image
         MultipartFile productImage = product.getProductImage();
@@ -133,8 +140,14 @@ public class HomeController {
     }
 
     @PostMapping("/admin/productInventory/editProduct")
-    public String editProduct(@ModelAttribute("product") Product product, HttpServletRequest request, Model model) {
+    public String editProduct(@Valid @ModelAttribute("product") Product product,
+                              BindingResult result,
+                              HttpServletRequest request,
+                              Model model) {
 
+        if(result.hasErrors()){
+            return "editProduct";
+        }
         MultipartFile productImage = product.getProductImage();
         String rootDirectory = request.getSession().getServletContext().getRealPath("/");
         path = Paths.get(rootDirectory + "WEB-INF/resources/images/picture" + product.getProductId() + ".png");

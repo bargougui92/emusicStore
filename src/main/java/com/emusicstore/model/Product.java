@@ -1,8 +1,11 @@
 package com.emusicstore.model;
 
+import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 
 
 @Entity
@@ -15,6 +18,7 @@ public class Product {
     @Column(name = "product_id")
     private int productId;
 
+    @NotEmpty(message = "must not be empty")
     @Column(name = "product_name")
     private String productName;
 
@@ -24,6 +28,8 @@ public class Product {
     @Column(name = "product_description")
     private String productDescription;
 
+    @NotNull
+    @Min(value = 0, message = "product price must not be less than zero")
     @Column(name = "product_price")
     private double productPrice;
 
@@ -33,6 +39,8 @@ public class Product {
     @Column(name = "product_status")
     private String productStatus;
 
+    @NotNull
+    @Min(value = 0, message = "must not be zero")
     @Column(name = "unit_in_stock")
     private int unitInStock;
 
